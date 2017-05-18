@@ -64,7 +64,6 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     this._super();
     
     this.rows = [];
-    this.row_cache = [];
 
     this.hide_delete_buttons = this.options.disable_array_delete || this.jsoneditor.options.disable_array_delete;
     this.hide_delete_all_rows_buttons = this.hide_delete_buttons || this.options.disable_array_delete_all_rows || this.jsoneditor.options.disable_array_delete_all_rows;
@@ -225,7 +224,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     if(this.controls && this.controls.parentNode) this.controls.parentNode.removeChild(this.controls);
     if(this.panel && this.panel.parentNode) this.panel.parentNode.removeChild(this.panel);
     
-    this.rows = this.row_cache = this.title = this.description = this.row_holder = this.panel = this.controls = null;
+    this.rows = this.title = this.description = this.row_holder = this.panel = this.controls = null;
 
     this._super();
   },
@@ -236,25 +235,16 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       if(hard) {
         if(row.tab && row.tab.parentNode) row.tab.parentNode.removeChild(row.tab);
         self.destroyRow(row,true);
-        self.row_cache[i] = null;
       }
       self.rows[i] = null;
     });
     self.rows = [];
-    if(hard) self.row_cache = [];
   },
   destroyRow: function(row,hard) {
     var holder = row.container;
-    if(hard) {
-      row.destroy();
-      if(holder.parentNode) holder.parentNode.removeChild(holder);
-      if(row.tab && row.tab.parentNode) row.tab.parentNode.removeChild(row.tab);
-    }
-    else {
-      if(row.tab) row.tab.style.display = 'none';
-      holder.style.display = 'none';
-      row.unregister();
-    }
+    row.destroy();
+    if(holder.parentNode) holder.parentNode.removeChild(holder);
+    if(row.tab && row.tab.parentNode) row.tab.parentNode.removeChild(row.tab);
   },
   getMax: function() {
     if((Array.isArray(this.schema.items)) && this.schema.additionalItems === false) {
@@ -308,13 +298,6 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       if(self.rows[i]) {
         // TODO: don't set the row's value if it hasn't changed
         self.rows[i].setValue(val,initial);
-      }
-      else if(self.row_cache[i]) {
-        self.rows[i] = self.row_cache[i];
-        self.rows[i].setValue(val,initial);
-        self.rows[i].container.style.display = '';
-        if(self.rows[i].tab) self.rows[i].tab.style.display = '';
-        self.rows[i].register();
       }
       else {
         self.addRow(val,initial);
@@ -444,7 +427,6 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     var i = this.rows.length;
     
     self.rows[i] = this.getElementEditor(i);
-    self.row_cache[i] = self.rows[i];
 
     if(self.tabs_holder) {
       self.rows[i].tab_text = document.createElement('span');
@@ -610,16 +592,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       e.preventDefault();
       e.stopPropagation();
       var i = self.rows.length;
-      if(self.row_cache[i]) {
-        self.rows[i] = self.row_cache[i];
-        self.rows[i].setValue(self.rows[i].getDefault(), true);
-        self.rows[i].container.style.display = '';
-        if(self.rows[i].tab) self.rows[i].tab.style.display = '';
-        self.rows[i].register();
-      }
-      else {
-        self.addRow();
-      }
+      self.addRow();
       self.active_tab = self.rows[i].tab;
       self.refreshTabs();
       self.refreshValue();
