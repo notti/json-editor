@@ -558,7 +558,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       }
     }
 
-    if(value) self.rows[i].setValue(value, initial);
+    if(typeof value !== 'undefined') self.rows[i].setValue(value, initial);
     self.refreshTabs();
   },
   addControls: function() {
