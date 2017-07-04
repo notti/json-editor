@@ -326,7 +326,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     self.refreshTabs(true);
     self.refreshTabs();
 
-    self.onChange();
+    self.onChange(true);
     
     // TODO: sortable
   },
