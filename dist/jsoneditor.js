@@ -2644,7 +2644,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
     // If the object should be rendered as a div
     else {
       this.header = document.createElement('span');
-      this.header.innerHTML = this.getTitle();
+      this.header.innerHTML = '<span class="titlehelp">'+this.getTitle()+'</span>';
       this.title = this.theme.getHeader(this.header);
       this.container.appendChild(this.title);
       this.container.style.position = 'relative';
@@ -3304,7 +3304,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 
     if(!this.options.compact) {
       this.header = document.createElement('span');
-      this.header.innerHTML = this.getTitle();
+      this.header.innerHTML = '<span class="titlehelp">'+this.getTitle()+'</span>';
       this.title = this.theme.getHeader(this.header);
       this.container.appendChild(this.title);
       this.title_controls = this.theme.getHeaderButtonHolder();
@@ -6154,7 +6154,7 @@ JSONEditor.AbstractTheme = Class.extend({
   },
   getFormInputLabel: function(text) {
     var el = document.createElement('label');
-    el.appendChild(document.createTextNode(text));
+    el.innerHTML = '<span class="titlehelp">'+text+'</span>';
     return el;
   },
   getCheckboxLabel: function(text) {
@@ -6165,7 +6165,7 @@ JSONEditor.AbstractTheme = Class.extend({
   getHeader: function(text) {
     var el = document.createElement('h3');
     if(typeof text === "string") {
-      el.textContent = text;
+      el.innerHTML = '<span class="titlehelp">'+text+'</span>';
     }
     else {
       el.appendChild(text);

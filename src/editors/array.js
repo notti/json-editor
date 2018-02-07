@@ -76,7 +76,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 
     if(!this.options.compact) {
       this.header = document.createElement('span');
-      this.header.innerHTML = this.getTitle();
+      this.header.innerHTML = '<span class="titlehelp">'+this.getTitle()+'</span>';
       this.title = this.theme.getHeader(this.header);
       this.container.appendChild(this.title);
       this.title_controls = this.theme.getHeaderButtonHolder();
